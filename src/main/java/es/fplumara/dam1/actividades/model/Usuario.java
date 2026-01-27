@@ -9,7 +9,7 @@ public class Usuario {
     private String email;
     public Usuario(){}
 
-   public Usuario(Long id, String nombre, perfilUsuario perfil, String discordUserId, String curso, String email){
+   public Usuario(long id, String nombre, perfilUsuario perfil, String discordUserId, String curso, String email){
     this.id= id;
     this.nombre= nombre;
     this.perfil=perfil;
@@ -70,6 +70,8 @@ public class Usuario {
                 ", perfil=" + perfil + ", discordUserId=" + discordUserId + ", curso=" + curso + ", email=" + email;
     };
     }
+
+    /// look at this part
 
 
 
