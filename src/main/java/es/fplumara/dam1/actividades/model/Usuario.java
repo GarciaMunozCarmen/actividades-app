@@ -3,14 +3,14 @@ package es.fplumara.dam1.actividades.model;
 public class Usuario {
     private Long id;
     private String nombre;
-    private perfilUsuario perfil;
+    private PerfilUsuario perfil;
     private String discordUserId;
     private String curso;
     private String email;
 
     public Usuario(){}
 
-   public Usuario(Long id, String nombre, perfilUsuario perfil, String discordUserId, String curso, String email){
+   public Usuario(Long id, String nombre, PerfilUsuario perfil, String discordUserId, String curso, String email){
     this.id= id;
     this.nombre= nombre;
     this.perfil=perfil;
@@ -35,7 +35,7 @@ public class Usuario {
         this.perfil=perfil;
     }
 
-    public void setPerfil(perfilUsuario perfil) {
+    public void setPerfil(PerfilUsuario perfil) {
         this.perfil = perfil;
     }
 
