@@ -3,36 +3,58 @@ package es.fplumara.dam1.actividades.repository.memory;
 import es.fplumara.dam1.actividades.model.Usuario;
 import es.fplumara.dam1.actividades.repository.UsuarioRepository;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 public class InMemoryUsuarioRepository implements UsuarioRepository {
-    private Map<UUID, Usuario> almacen;
+    private Map<UUID, Usuario> almacen = new HashMap<>();
 
     @Override
     public Usuario save(Usuario usuario) {
-        return null;
+        if(usuario.getId() == null){
+            usuario.setId(UUID.randomUUID());
+        }
+        almacen.put(usuario.getId(), usuario);
+        return usuario;
     }
 
     @Override
-    public Optional<Usuario> findById(long id) {
-        return Optional.empty();
+    public Optional<Usuario> findById(UUID id) {
+        return Optional.of(almacen.get(id));
     }
 
     @Override
-    public List<Usuario> findByEmail(String email) {
-        return List.of();
+    public List<Usuario> findAll() {
+        List<Usuario> usuarios = new ArrayList<>();
+        for (Map.Entry<UUID, Usuario> entry : almacen.entrySet()) {
+            usuarios.add(entry.getValue());
+        }
+        return usuarios;
+    }
+
+    @Override
+    public Optional<Usuario> findByEmail(String email) {
+        Optional<Usuario> usuario = Optional.empty();
+        for (Map.Entry<UUID, Usuario> entry : almacen.entrySet()) {
+            if(email.equalsIgnoreCase(entry.getValue().getEmail())){
+                usuario = Optional.of(entry.getValue());
+            }
+        }
+        return usuario;
     }
 
     @Override
     public Optional<Usuario> findByDiscordUserId(String discordUserId) {
-        return Optional.empty();
+        Optional<Usuario> usuario = Optional.empty();
+        for (Map.Entry<UUID, Usuario> entry : almacen.entrySet()) {
+            if(discordUserId.equalsIgnoreCase(entry.getValue().getDiscordUserId())){
+                usuario = Optional.of(entry.getValue());
+            }
+        }
+        return usuario;
     }
 
     @Override
-    public void deleteById(Long id) {
-
+    public void deleteById(UUID id) {
+        almacen.remove(id);
     }
 }

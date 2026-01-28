@@ -10,8 +10,7 @@ public class Usuario {
     private String curso;
     private String email;
 
-    public Usuario(UUID id, String nombre, PerfilUsuario perfil, String discordUserId, String curso, String email){
-        this.id= id;
+    public Usuario(String nombre, PerfilUsuario perfil, String discordUserId, String curso, String email){
         this.nombre= nombre;
         this.perfil=perfil;
         this.discordUserId=discordUserId;
