@@ -10,7 +10,8 @@ public interface UsuarioService {
 Usuario crearUsuario(Usuario usuario);
 List<Usuario> listarUsuario();
 Optional<Usuario> obtenerUsuario(UUID id);
-Usuario actualizarUsuario(Long id, Usuario usuario);
+Usuario actualizarUsuario(UUID id, Usuario usuario);
+ //   Borrar con cascada
 void eliminarUsuario(UUID id);
 }
 
@@ -29,11 +30,3 @@ void eliminarUsuario(UUID id);
 
 
 
-
-
-/*package es.fplumara.dam1.actividades.service;
-
-
-
-
-}
