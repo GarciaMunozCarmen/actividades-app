@@ -1,12 +1,15 @@
 package es.fplumara.dam1.actividades.repository;
 
+import es.fplumara.dam1.actividades.model.Taller;
 import es.fplumara.dam1.actividades.model.Usuario;
 
 import java.util.Optional;
+import java.util.UUID;
+
 
 public interface TallerRepository {
-    Usuario save(Usuario usuario);
-    Optional<Usuario> getFindByyId(Long id);
-    Optional<Usuario> findByDiscordUserId(String discordUserId);
-    void deleteBy(Long id);
+    Taller save(Taller taller);
+    Optional<Taller> findById(UUID id);
+    void deleteBy(UUID id);
 }
+
