@@ -1,5 +1,6 @@
 package es.fplumara.dam1.actividades.service;
 
+import es.fplumara.dam1.actividades.dto.UsuarioCreateDto;
 import es.fplumara.dam1.actividades.model.Usuario;
 
 import java.util.List;
@@ -7,7 +8,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 public interface UsuarioService {
-    Usuario crearUsuario(Usuario usuario);
+    Usuario crearUsuario(UsuarioCreateDto usuario);
     List<Usuario> listarUsuario();
     Optional<Usuario> obtenerUsuario(UUID id);
     Usuario actualizarUsuario(UUID id, Usuario usuario);
