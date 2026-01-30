@@ -38,7 +38,7 @@ public class TallerServiceImpl implements TallerService  {
 
     @Override
     public void cambiarEstadoInscripcion(UUID idTaller, EstadoInscripcion estado) {
-
+        tallerRepository.findById(idTaller).get().setEstadoInscripcion(estado);
     }
 
     @Override

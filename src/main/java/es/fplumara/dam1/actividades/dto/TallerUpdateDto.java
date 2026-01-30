@@ -1,4 +1,20 @@
 package es.fplumara.dam1.actividades.dto;
 
-public class TallerUpdateDto {
+import es.fplumara.dam1.actividades.model.EstadoInscripcion;
+
+public record TallerUpdateDto(
+
+        String titulo,
+
+        String descripcion,
+
+        EstadoInscripcion estadoInscripcion,
+
+        String url,
+
+        int cupo,
+
+        String lugar
+) {
+
 }
