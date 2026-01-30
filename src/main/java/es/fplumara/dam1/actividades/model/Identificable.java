@@ -7,5 +7,4 @@ public interface Identificable<ID extends Serializable> {
 
     public ID getId();
 
-    void setId(ID id);
 }

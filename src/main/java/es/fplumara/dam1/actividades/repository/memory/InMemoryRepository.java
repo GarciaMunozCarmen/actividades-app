@@ -10,7 +10,6 @@ public class InMemoryRepository<T extends Identificable<ID>, ID extends Serializ
 
     protected Map<ID, T> storage = new HashMap<>();
 
-
     @Override
     public T save(T entity) {
         storage.put(entity.getId(), entity);
