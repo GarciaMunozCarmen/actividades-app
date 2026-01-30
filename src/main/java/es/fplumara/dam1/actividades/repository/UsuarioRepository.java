@@ -5,11 +5,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-public interface UsuarioRepository {
-    Usuario save(Usuario usuario);
-    Optional<Usuario> findById(UUID id);
-    List<Usuario> findAll();
+public interface UsuarioRepository extends Repository<Usuario,UUID> {
     Optional<Usuario> findByEmail(String email);
     Optional<Usuario> findByDiscordUserId(String discordUserId);
-    void deleteById(UUID id);
 }

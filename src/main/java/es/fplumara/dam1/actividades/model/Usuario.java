@@ -1,7 +1,7 @@
 package es.fplumara.dam1.actividades.model;
 import java.util.UUID;
 
-public class Usuario {
+public class Usuario implements Identificable<UUID>{
     private UUID id;
     private String nombre;
     private PerfilUsuario perfil;

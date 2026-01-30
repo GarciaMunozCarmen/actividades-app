@@ -6,8 +6,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-public interface InscripcionRepository {
-    void save(Inscripcion inscripcion);
+public interface InscripcionRepository extends Repository<Inscripcion,String> {
+
     Optional<Inscripcion> findByTallerIdAndUsuarioId(UUID tallerId, UUID usuarioId);
     List<Inscripcion> findByTallerId(UUID tallerId);
     List<Inscripcion> findByUsuarioId(UUID usuarioId);

@@ -6,17 +6,11 @@ import es.fplumara.dam1.actividades.repository.InscripcionRepository;
 
 import java.util.*;
 
-public class InMemoryInscripcionRepository implements InscripcionRepository {
-    private Map<String, Inscripcion> storage = new HashMap<>();
-
-    @Override
-    public void save(Inscripcion inscripcion) {
-        storage.put(inscripcion.getId(), inscripcion);
-    }
+public class InMemoryInscripcionRepository extends InMemoryRepository<Inscripcion,String> implements InscripcionRepository {
 
     @Override
     public Optional<Inscripcion> findByTallerIdAndUsuarioId(UUID tallerId, UUID usuarioId) {
-        return storage.values().stream().filter(i -> i.getId().equals(tallerId.toString() + "/" + usuarioId.toString())).findFirst();
+        return this.findById(tallerId.toString() + "/" + usuarioId.toString());
     }
 
     @Override
@@ -42,6 +36,6 @@ public class InMemoryInscripcionRepository implements InscripcionRepository {
 
     @Override
     public void deleteByTallerIdAndUsuarioId(UUID tallerId, UUID usuarioId) {
-       storage.values().stream().filter(i -> i.getId().equals(tallerId.toString() + "/" + usuarioId.toString())).forEach(storage::remove);
+       this.deleteById(tallerId.toString() + "/" + usuarioId.toString());
     }
 }
