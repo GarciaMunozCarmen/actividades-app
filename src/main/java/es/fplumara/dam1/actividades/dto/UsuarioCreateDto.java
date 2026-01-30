@@ -1,4 +1,12 @@
 package es.fplumara.dam1.actividades.dto;
 
-public class UsuarioCreateDto {
-}
+import es.fplumara.dam1.actividades.model.PerfilUsuario;
+
+public record UsuarioCreateDto(
+        String nombre,
+        PerfilUsuario perfil,
+        String discordUserId,
+        String curso,
+        String email
+) { }
+

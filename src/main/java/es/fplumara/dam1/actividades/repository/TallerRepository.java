@@ -8,10 +8,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 
-public interface TallerRepository {
-    Taller save(Taller taller);
-    Optional<Taller> findById(UUID id);
-    List<Taller> findAll();
-    void deleteById(UUID id);
+public interface TallerRepository extends Repository<Taller, UUID> {
+
 }
 

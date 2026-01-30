@@ -23,7 +23,7 @@ public class Taller {
         this.cupo = cupo;
         this.lugar = lugar;
     }
-    // constructor with id for creating new talleres
+
     public Taller(String titulo, String descripcion, EstadoInscripcion estadoInscripcion, String url, int cupo, String lugar) {
         this.titulo = titulo;
         this.descripcion = descripcion;

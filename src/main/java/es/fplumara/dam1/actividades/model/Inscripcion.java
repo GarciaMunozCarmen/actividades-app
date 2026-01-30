@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.UUID;
 
-public class Inscripcion {
+public class Inscripcion implements Identificable<String>{
     private UUID idTaller;
     private UUID idUsuario;
     private RolInscripcion rol;
@@ -21,6 +21,7 @@ public class Inscripcion {
     public String getId() {
         return idTaller.toString() + "/" + idUsuario.toString();
     }
+
 
     public UUID getIdTaller() {
         return idTaller;
