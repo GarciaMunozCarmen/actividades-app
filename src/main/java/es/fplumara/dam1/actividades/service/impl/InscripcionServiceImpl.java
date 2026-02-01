@@ -1,16 +1,17 @@
 package es.fplumara.dam1.actividades.service.impl;
 
-import es.fplumara.dam1.actividades.model.Inscripcion;
-import es.fplumara.dam1.actividades.model.PerfilUsuario;
-import es.fplumara.dam1.actividades.model.RolInscripcion;
-import es.fplumara.dam1.actividades.model.Usuario;
+import es.fplumara.dam1.actividades.exception.NotFoundException;
+import es.fplumara.dam1.actividades.model.*;
+import es.fplumara.dam1.actividades.repository.*;
+import es.fplumara.dam1.actividades.repository.memory.*;
 import es.fplumara.dam1.actividades.service.InscripcionService;
 
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
-public class InscripcionServiceImpl extends InscripcionService {
+public class InscripcionServiceImpl implements InscripcionService {
+    private InscripcionRepository inscripcionRepository = new InMemoryInscripcionRepository();
+    private UsuarioRepository usuarioRepository = new InMemoryUsuarioRepository();
+
     @Override
     public void inscribirUsuario(UUID tallerId, UUID usuarioId, RolInscripcion rol) {
 
@@ -22,27 +23,36 @@ public class InscripcionServiceImpl extends InscripcionService {
     }
 
     @Override
-    public void expulsarusuario(UUID tallerId, UUID usuarioID) {
-
+    public void expulsarusuario(UUID tallerId, UUID usuarioId) {
+        inscripcionRepository.deleteByTallerIdAndUsuarioId(tallerId, usuarioId);
     }
 
     @Override
     public List<Inscripcion> listarInscripcionesDeTaller(UUID tallerId) {
-        return List.of();
+        return inscripcionRepository.findByTallerId(tallerId);
     }
 
     @Override
     public List<Inscripcion> listarInscripcionesDeUsuario(UUID usuarioId) {
-        return List.of();
+        return inscripcionRepository.findByUsuarioId(usuarioId);
     }
 
     @Override
     public Map<PerfilUsuario, List<Usuario>> verMiembrosAgrupadosPorPerfil(UUID tallerId) {
-        return Map.of();
+        Map<PerfilUsuario, List<Usuario>> miembros = new HashMap<>();
+        Arrays.stream(PerfilUsuario.values()).forEach(v -> miembros.put(v, new ArrayList<>()));
+        List<Inscripcion> inscripciones = inscripcionRepository.findByTallerId(tallerId);
+        for (Inscripcion i : inscripciones){
+            Usuario user = usuarioRepository.findById(i.getIdUsuario()).get();
+            miembros.get(user.getPerfil()).add(user);
+        }
+        return miembros;
     }
 
     @Override
     public List<Usuario> verResponsables(UUID tallerId) {
-        return List.of();
+        List<Usuario> responsables = new ArrayList<>();
+        inscripcionRepository.findByTallerId(tallerId).stream().filter(t -> t.getRol().equals(RolInscripcion.RESPONSABLE)).forEach(t -> responsables.add(usuarioRepository.findById(t.getIdUsuario()).get()));
+        return responsables;
     }
 }
