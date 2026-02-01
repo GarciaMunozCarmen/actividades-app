@@ -1,6 +1,6 @@
 package es.fplumara.dam1.actividades.service.impl;
 
-import es.fplumara.dam1.actividades.exception.NotFoundException;
+import es.fplumara.dam1.actividades.dto.InscripcionCreateDto;
 import es.fplumara.dam1.actividades.model.*;
 import es.fplumara.dam1.actividades.repository.*;
 import es.fplumara.dam1.actividades.repository.memory.*;
@@ -13,12 +13,12 @@ public class InscripcionServiceImpl implements InscripcionService {
     private UsuarioRepository usuarioRepository = new InMemoryUsuarioRepository();
 
     @Override
-    public void inscribirUsuario(UUID tallerId, UUID usuarioId, RolInscripcion rol) {
+    public void inscribirUsuario(InscripcionCreateDto dto) {
 
     }
 
     @Override
-    public void cambiarRol(UUID tallerId, UUID usuarioId, RolInscripcion rol) {
+    public void cambiarRol(InscripcionCreateDto dto) {
 
     }
 
