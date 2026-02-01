@@ -14,125 +14,157 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-    public class UsuarioServiceImpl implements UsuarioService {
+public class UsuarioServiceImpl implements UsuarioService {
 
-        private final UsuarioRepository usuarioRepository;
-        private final InscripcionRepository inscripcionRepository;
+    private final UsuarioRepository usuarioRepository;
+    private final InscripcionRepository inscripcionRepository;
 
-        public UsuarioServiceImpl(
-                UsuarioRepository usuarioRepository,
-                InscripcionRepository inscripcionRepository
-        ) {
-            this.usuarioRepository = usuarioRepository;
-            this.inscripcionRepository = inscripcionRepository;
-        }
-
-        // CREATE
-@Override
-        public Usuario crearUsuario(UsuarioCreateDto dto) {
-
-            if (dto.nombre() == null || dto.nombre().isBlank()) {
-                throw new BusinessRuleException("Nombre es obligatorio");
-            }
-
-            if (dto.curso() != null && dto.perfil() != PerfilUsuario.ALUMNO) {
-                throw new BusinessRuleException("Curso solo permitido para ALUMNOS");
-            }
-
-            usuarioRepository.findAll().forEach(u -> {
-                if (dto.email() != null && dto.email().equals(u.getEmail())) {
-                    throw new BusinessRuleException("Email duplicado");
-                }
-                if (dto.discordUserId() != null &&
-                        dto.discordUserId().equals(u.getDiscordUserId())) {
-                    throw new BusinessRuleException("DiscordUserId duplicado");
-                }
-            });
-
-            Usuario usuario = new Usuario(
-                    null,
-                    dto.nombre(),
-                    dto.perfil(),
-                    dto.discordUserId(),
-                    dto.curso(),
-                    dto.email()
-            );
-
-            return usuarioRepository.save(usuario);
-        }
-
-        //leer
-
-        public List<Usuario> listarUsuarios() {
-            return usuarioRepository.findAll();
-        }
-
-
-        public Usuario crearUsuario(Usuario usuario) {
-            return null;
-        }
-
-        @Override
-        public List<Usuario> listarUsuario() {
-            return List.of();
-        }
-
-        @Override
-        public Optional<Usuario> obtenerUsuario(UUID id) {
-            return usuarioRepository.findById(id);
-        }
-
-        @Override
-        public Usuario actualizarUsuario(UUID id, Usuario usuario) {
-            return null;
-        }
-
-        //update**
-
-        public Usuario actualizarUsuario(UUID id, UsuarioUpdateDto dto) {
-
-            Usuario usuario = usuarioRepository.findById(id)
-                    .orElseThrow(() -> new NotFoundException("could not find the user"));
-
-            if (dto.getNombre() != null) usuario.setNombre(dto.getNombre());
-            if (dto.getPerfil() != null) usuario.setPerfil(dto.getPerfil());
-
-            if (dto.getCurso() != null && usuario.getPerfil() != PerfilUsuario.ALUMNO) {
-                throw new BusinessRuleException("Just for alumnos");
-            }
-            if (dto.getCurso() != null) usuario.setCurso(dto.getCurso());
-
-            if (dto.getEmail() != null) {
-                usuarioRepository.findAll().forEach(u -> {
-                    if (!u.getId().equals(id) &&
-                            dto.getEmail().equals(u.getEmail())) {
-                        throw new BusinessRuleException("Email duplicado");
-                    }
-                });
-                usuario.setEmail(dto.getEmail());
-            }
-
-            if (dto.getDiscordUserId() != null) {
-                usuarioRepository.findAll().forEach(u -> {
-                    if (!u.getId().equals(id) &&
-                            dto.getDiscordUserId().equals(u.getDiscordUserId())) {
-                        throw new BusinessRuleException("DiscordUserId duplicado");
-                    }
-                });
-                usuario.setDiscordUserId(dto.getDiscordUserId());
-            }
-
-            return usuarioRepository.save(usuario);
-        }
-
-        //delete (cascada)
-
-        @Override
-        public void eliminarUsuario(UUID id) {
-
-            usuarioRepository.findById(id)
-                    .orElseThrow(() -> new NotFoundException("Usuario no encontrado"));
-            inscripcionRepository.deleteByUsuarioId(id);
-
-        }
+    public UsuarioServiceImpl(
+            UsuarioRepository usuarioRepository,
+            InscripcionRepository inscripcionRepository
+    ) {
+        this.usuarioRepository = usuarioRepository;
+        this.inscripcionRepository = inscripcionRepository;
     }
+
+    // CREATE
+    @Override
+    public Usuario crearUsuario(UsuarioCreateDto dto) {
+        // Validate name
+        if (dto.nombre() == null || dto.nombre().isBlank()) {
+            throw new BusinessRuleException("Name is required");
+        }
+
+        // Validate course/profile rule
+        if (dto.curso() != null && dto.perfil() != PerfilUsuario.ALUMNO) {
+            throw new BusinessRuleException("Course only allowed for STUDENTS");
+        }
+
+        // Check for duplicate email
+        if (dto.email() != null && !dto.email().isBlank()) {
+            usuarioRepository.findByEmail(dto.email())
+                    .ifPresent(u -> {
+                        throw new BusinessRuleException("Email already exists");
+                    });
+        }
+
+        // Check for duplicate Discord id
+        if (dto.discordUserId() != null && !dto.discordUserId().isBlank()) {
+            usuarioRepository.findByDiscordUserId(dto.discordUserId())
+                    .ifPresent(u -> {
+                        throw new BusinessRuleException("Discord ID already exists");
+                    });
+        }
+
+        // Create user with null ID (in repository with uuid generate / generate it)
+        Usuario usuario = new Usuario(
+                null,
+                dto.nombre(),
+                dto.perfil(),
+                dto.discordUserId(),
+                dto.curso(),
+                dto.email()
+        );
+
+        return usuarioRepository.save(usuario);
+    }
+
+    // LIST ALL USERS - FIXED
+    @Override
+    public List<Usuario> listarUsuario() {
+        return usuarioRepository.findAll();  // NOT List.of()
+    }
+
+    // GET USER BY ID
+    @Override
+    public Optional<Usuario> obtenerUsuario(UUID id) {
+        return usuarioRepository.findById(id);
+    }
+
+    // UPDATE - FIXED (using record methods, not getters)
+    @Override
+    public Usuario actualizarUsuario(UUID id, UsuarioUpdateDto dto) {
+        // Find existing user
+        Usuario usuario = usuarioRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("User not found"));
+
+        // Update name if provided
+        if (dto.nombre().isPresent()) {
+            String newName = dto.nombre().get();
+            if (newName.isBlank()) {
+                throw new BusinessRuleException("Name cannot be empty");
+            }
+            usuario.setNombre(newName);
+        }
+
+        // Update profile if provided
+        if (dto.perfil().isPresent()) {
+            usuario.setPerfil(dto.perfil().get());
+
+            // If changing from STUDENT to another profile, clear course
+            if (dto.perfil().get() != PerfilUsuario.ALUMNO) {
+                usuario.setCurso(null);
+            }
+        }
+
+        // Update course if provided (only for students)
+        if (dto.curso().isPresent()) {
+            if (usuario.getPerfil() != PerfilUsuario.ALUMNO) {
+                throw new BusinessRuleException("Course only allowed for STUDENTS");
+            }
+            usuario.setCurso(dto.curso().get());
+        }
+
+        // Update email if provided
+        if (dto.email().isPresent()) {
+            String newEmail = dto.email().get();
+            if (!newEmail.isBlank()) {
+                // Check for duplicate email (excluding current user)
+                usuarioRepository.findByEmail(newEmail)
+                        .ifPresent(otherUser -> {
+                            if (!otherUser.getId().equals(id)) {
+                                throw new BusinessRuleException("Email already in use");
+                            }
+                        });
+                usuario.setEmail(newEmail);
+            }
+        }
+
+        // Update Discord ID if provided
+        if (dto.discordUserId().isPresent()) {
+            String newDiscordId = dto.discordUserId().get();
+            if (!newDiscordId.isBlank()) {
+                // Check for duplicate Discord ID *excluding current user)
+                usuarioRepository.findByDiscordUserId(newDiscordId)
+                        .ifPresent(otherUser -> {
+                            if (!otherUser.getId().equals(id)) {
+                                throw new BusinessRuleException("Discord ID already in use");
+                            }
+                        });
+                usuario.setDiscordUserId(newDiscordId);
+            }
+        }
+
+        return usuarioRepository.save(usuario);
+    }
+
+    // Delete - fix (delete the user)
+    @Override
+    public void eliminarUsuario(UUID id) {
+        // Check if user exists
+        usuarioRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("User not found"));
+
+        //delete all userinscriptions first (cascade)
+        inscripcionRepository.deleteByUsuarioId(id);
+
+        // delete the user
+        usuarioRepository.deleteById(id);
+    }
+
+/*
+    // If I need this method, I can rename it to something else
+    public List<Usuario> listarUsuarios() {
+        return listarUsuario();  // Call the existing method
+    }*/
+}
