@@ -19,6 +19,9 @@ public class InscripcionServiceImpl implements InscripcionService {
     public void inscribirUsuario(InscripcionCreateDto dto) {
         tallerRepository.findById(dto.idTaller()).orElseThrow(()-> new NotFoundException("El taller no existe"));
         usuarioRepository.findById(dto.idUsuario()).orElseThrow(()-> new NotFoundException("El usuario no existe"));
+        if(inscripcionRepository.findByTallerIdAndUsuarioId(dto.idTaller(), dto.idUsuario()).isPresent()){
+            throw new BusinessRuleException("Inscripción ya creada");
+        }
         if(tallerRepository.findById(dto.idTaller()).get().getEstadoInscripcion().equals(EstadoInscripcion.ABIERTO)) {
             inscripcionRepository.save(new Inscripcion(dto.idTaller(), dto.idUsuario(), dto.rol()));
         }else{
