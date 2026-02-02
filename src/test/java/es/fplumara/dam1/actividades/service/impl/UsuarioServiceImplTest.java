@@ -1,4 +1,4 @@
-package es.fplumara.dam1.actividades.service.imp;
+package es.fplumara.dam1.actividades.service.impl;
 
 import es.fplumara.dam1.actividades.dto.UsuarioCreateDto;
 import es.fplumara.dam1.actividades.exception.BusinessRuleException;
@@ -6,7 +6,6 @@ import es.fplumara.dam1.actividades.model.PerfilUsuario;
 import es.fplumara.dam1.actividades.model.Usuario;
 import es.fplumara.dam1.actividades.repository.InscripcionRepository;
 import es.fplumara.dam1.actividades.repository.UsuarioRepository;
-import es.fplumara.dam1.actividades.service.impl.UsuarioServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

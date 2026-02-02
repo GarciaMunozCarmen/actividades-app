@@ -112,12 +112,15 @@
             <artifactId>commons-csv</artifactId>
             <version>${commons-csv.version}</version>
         </dependency>
+
+        <!-- JAKARTA -->
         <dependency>
             <groupId>jakarta.validation</groupId>
             <artifactId>jakarta.validation-api</artifactId>
             <version>${jakarta-validation.version}</version>
             <scope>compile</scope>
         </dependency>
+
         <dependency>
             <groupId>org.hibernate.validator</groupId>
             <artifactId>hibernate-validator</artifactId>
@@ -129,5 +132,6 @@
             <artifactId>jakarta.el</artifactId>
             <version>4.0.2</version>
         </dependency>
+
     </dependencies>
 </project>

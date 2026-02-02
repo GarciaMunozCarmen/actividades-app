@@ -3,7 +3,7 @@ package es.fplumara.dam1.actividades.model;
 import java.net.URL;
 import java.util.UUID;
 
-public class Taller implements Identificable<UUID>{
+public class Taller implements Identificable<UUID> {
     private UUID id;
     private String titulo;
     private String descripcion;
@@ -23,7 +23,7 @@ public class Taller implements Identificable<UUID>{
         this.cupo = cupo;
         this.lugar = lugar;
     }
-    // constructor with id for creating new talleres
+
     public Taller(String titulo, String descripcion, EstadoInscripcion estadoInscripcion, String url, int cupo, String lugar) {
         this.titulo = titulo;
         this.descripcion = descripcion;
@@ -32,7 +32,6 @@ public class Taller implements Identificable<UUID>{
         this.cupo = cupo;
         this.lugar = lugar;
     }
-
 
     public UUID getId() {
         return id;

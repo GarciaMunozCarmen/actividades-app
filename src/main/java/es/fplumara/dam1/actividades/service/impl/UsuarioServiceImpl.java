@@ -14,18 +14,18 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-public class UsuarioServiceImpl implements UsuarioService {
+    public class UsuarioServiceImpl implements UsuarioService {
 
-    private final UsuarioRepository usuarioRepository;
-    private final InscripcionRepository inscripcionRepository;
+        private final UsuarioRepository usuarioRepository;
+        private final InscripcionRepository inscripcionRepository;
 
-    public UsuarioServiceImpl(
-            UsuarioRepository usuarioRepository,
-            InscripcionRepository inscripcionRepository
-    ) {
-        this.usuarioRepository = usuarioRepository;
-        this.inscripcionRepository = inscripcionRepository;
-    }
+        public UsuarioServiceImpl(
+                UsuarioRepository usuarioRepository,
+                InscripcionRepository inscripcionRepository
+        ) {
+            this.usuarioRepository = usuarioRepository;
+            this.inscripcionRepository = inscripcionRepository;
+        }
 
     // CREATE
     @Override
