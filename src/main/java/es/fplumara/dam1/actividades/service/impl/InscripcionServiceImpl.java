@@ -7,6 +7,7 @@ import es.fplumara.dam1.actividades.model.*;
 import es.fplumara.dam1.actividades.repository.*;
 import es.fplumara.dam1.actividades.repository.memory.*;
 import es.fplumara.dam1.actividades.service.InscripcionService;
+import es.fplumara.dam1.actividades.util.ValidatorUtils;
 
 import java.util.*;
 
@@ -17,6 +18,7 @@ public class InscripcionServiceImpl implements InscripcionService {
 
     @Override
     public void inscribirUsuario(InscripcionCreateDto dto) {
+        ValidatorUtils.validateEntity(dto);
         Taller taller = tallerRepository.findById(dto.idTaller()).orElseThrow(()-> new NotFoundException("El taller no existe"));
         Usuario usuario = usuarioRepository.findById(dto.idUsuario()).orElseThrow(()-> new NotFoundException("El usuario no existe"));
         if(inscripcionRepository.findByTallerIdAndUsuarioId(dto.idTaller(), dto.idUsuario()).isPresent()){
@@ -38,6 +40,7 @@ public class InscripcionServiceImpl implements InscripcionService {
 
     @Override
     public void cambiarRol(InscripcionCreateDto dto) {
+        ValidatorUtils.validateEntity(dto);
         Taller taller = tallerRepository.findById(dto.idTaller()).orElseThrow(()-> new NotFoundException("El taller no existe"));
         Usuario usuario = usuarioRepository.findById(dto.idUsuario()).orElseThrow(()-> new NotFoundException("El usuario no existe"));
         if(!(dto.rol().equals(RolInscripcion.RESPONSABLE) && usuario.getPerfil().equals(PerfilUsuario.PROFESOR))){
@@ -53,7 +56,7 @@ public class InscripcionServiceImpl implements InscripcionService {
 
     @Override
     public void expulsarusuario(UUID tallerId, UUID usuarioId) {
-        inscripcionRepository.findByTallerIdAndUsuarioId(tallerId, usuarioId).orElseThrow(NotFoundException::new);
+        inscripcionRepository.findByTallerIdAndUsuarioId(tallerId, usuarioId).orElseThrow(()-> new NotFoundException("La inscripción no existe"));
         inscripcionRepository.deleteByTallerIdAndUsuarioId(tallerId, usuarioId);
     }
 
