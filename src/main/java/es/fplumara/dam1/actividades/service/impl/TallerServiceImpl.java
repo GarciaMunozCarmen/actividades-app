@@ -8,23 +8,19 @@ import es.fplumara.dam1.actividades.model.RolInscripcion;
 import es.fplumara.dam1.actividades.model.Taller;
 import es.fplumara.dam1.actividades.repository.InscripcionRepository;
 import es.fplumara.dam1.actividades.repository.TallerRepository;
+import es.fplumara.dam1.actividades.repository.memory.InMemoryInscripcionRepository;
+import es.fplumara.dam1.actividades.repository.memory.InMemoryTallerRepository;
 import es.fplumara.dam1.actividades.service.TallerService;
+import es.fplumara.dam1.actividades.util.ValidatorUtils;
 
 import java.util.List;
 import java.util.UUID;
 
 public class TallerServiceImpl implements TallerService {
 
-    private final TallerRepository tallerRepository;
-    private final InscripcionRepository inscripcionRepository;
+    private  TallerRepository tallerRepository = new InMemoryTallerRepository();
+    private InscripcionRepository inscripcionRepository= new InMemoryInscripcionRepository();
 
-    public TallerServiceImpl(
-            TallerRepository tallerRepository,
-            InscripcionRepository inscripcionRepository
-    ) {
-        this.tallerRepository = tallerRepository;
-        this.inscripcionRepository = inscripcionRepository;
-    }
 
 
     // CREATE
@@ -32,13 +28,7 @@ public class TallerServiceImpl implements TallerService {
     @Override
     public Taller crearTaller(TallerCreateDto dto) {
 
-        if (dto.titulo() == null || dto.titulo().isBlank()) {
-            throw new BusinessRuleException("El título es obligatorio");
-        }
-
-        if (dto.cupo() < 0) {
-            throw new BusinessRuleException("El cupo no puede ser negativo");
-        }
+        ValidatorUtils.validateEntity(dto);
 
         Taller taller = new Taller(
                 dto.titulo(),
