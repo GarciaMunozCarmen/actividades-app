@@ -21,14 +21,9 @@
         <commons-csv.version>1.14.1</commons-csv.version>
         <jakarta-validation.version>3.1.1</jakarta-validation.version>
         <hibernate-validator.version>9.1.0.Final</hibernate-validator.version>
-        <jda.version>6.3.0</jda.version> <!-- JDA actual -->
+        <jda.version>6.3.0</jda.version>
+        <javackar-mail.version>2.0.2</javackar-mail.version>
     </properties>
-
-
-
-
-
-
     <build>
         <plugins>
             <plugin>
@@ -140,14 +135,19 @@
             <artifactId>jakarta.el</artifactId>
             <version>4.0.2</version>
         </dependency>
-            <!-- JDA (Discord) -->
-            <dependency>
-                <groupId>net.dv8tion</groupId>
-                <artifactId>JDA</artifactId>
-                <version>6.3.0</version>
-            </dependency>
+
+        <!-- JDA (Discord) -->
+        <dependency>
+            <groupId>net.dv8tion</groupId>
+            <artifactId>JDA</artifactId>
+            <version>6.3.0</version>
+        </dependency>
 
 
-
+        <dependency>
+            <groupId>com.sun.mail</groupId>
+            <artifactId>jakarta.mail</artifactId>
+            <version>${javackar-mail.version}</version>
+        </dependency>
     </dependencies>
 </project>
