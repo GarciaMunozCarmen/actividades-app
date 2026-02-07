@@ -33,8 +33,7 @@ public class UsuarioServiceImpl implements UsuarioService {
 
         // Jakarta Validation
         ValidatorUtils.validateEntity(dto);
-
-
+        
         //  Duplicate email
         if (dto.Email() != null && !dto.Email().isBlank()) {
             usuarioRepository.findByEmail(dto.Email())
