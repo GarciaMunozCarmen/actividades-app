@@ -23,7 +23,13 @@ public class DiscordCommands extends ListenerAdapter {
                 df.setTimeZone(TimeZone.getTimeZone(zoneId));
                 String horaFormateada = df.format(date);
                 event.reply(horaFormateada).queue();
+            case "inscribirte":
+                try{
+                    String nombre = event.getOption("nombre").getAsString();
 
+                } catch (NullPointerException e) {
+                    event.reply("ERROR: debes rellenar todos los campos");
+                }
             default: event.reply("El comando no existe").queue();
         }
     }

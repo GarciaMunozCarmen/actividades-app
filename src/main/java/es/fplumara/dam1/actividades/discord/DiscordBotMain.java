@@ -24,11 +24,18 @@ public class DiscordBotMain {
         // 3) Registramos slash commands
         var guild = jda.getGuildById(GUILD_ID);
         if (guild == null) {
+
             throw new IllegalStateException("No encuentro el guild con id " + GUILD_ID);
         }
 
         guild.upsertCommand("ping","Pasa la bola!").queue();
         guild.upsertCommand("hora","Devuelve la hora") .addOption(OptionType.STRING, "zone", "Lugar del mundo").queue();
+        guild.upsertCommand("inscribirte", "Crea tu usuario")
+                .addOption(OptionType.STRING, "nombre", "Nombre de usuario")
+                .addOption(OptionType.STRING, "perfil", "Tipo de perfil (Alumnos, Profesor, Invitado")
+                .addOption(OptionType.STRING, "discorduserid", "Id de discord")
+                .addOption(OptionType.STRING, "curso", "Curso")
+                .addOption(OptionType.STRING, "email", "Email asociado a la cuenta").queue();;
 
     }
 }
