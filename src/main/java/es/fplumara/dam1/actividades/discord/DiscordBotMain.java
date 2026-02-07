@@ -24,6 +24,7 @@ public class DiscordBotMain {
         // 3) Registramos slash commands
         var guild = jda.getGuildById(GUILD_ID);
         if (guild == null) {
+
             throw new IllegalStateException("No encuentro el guild con id " + GUILD_ID);
         }
 
